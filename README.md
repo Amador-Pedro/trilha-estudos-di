@@ -2,6 +2,10 @@
 
 Primeira versão do projeto de Desenvolvimento de Interfaces, 2º semestre de 2026. O site permite explorar métodos de estudo, salvar favoritos e marcar os métodos experimentados. É um protótipo acadêmico desenvolvido com apoio de IA; não oferece autenticação real ou envio de mensagens.
 
+**[Abrir o site publicado](https://amador-pedro.github.io/trilha-estudos-di/)** · [Código no GitHub](https://github.com/Amador-Pedro/trilha-estudos-di)
+
+O repositório inclui o relatório parcial em PDF e Word, `APRESENTACAO.md`, `ENTENDA-O-CODIGO.md`, `TESTES.md` e `USO-DE-IA.md`. O PDF foi renderizado e inspecionado. A versão Word é editável; sua paginação não pôde ser conferida neste ambiente. Preencha nome e RA antes de entregar o relatório. A Parte C precisa ser escrita pessoalmente.
+
 ## Executar
 
 Abra `index.html` no navegador. Não é necessário instalar pacotes. Para uma origem local estável e persistência previsível, execute `python -m http.server 8000` nesta pasta (se tiver Python instalado) e abra `http://localhost:8000`. O armazenamento ao abrir arquivos diretamente pode variar entre navegadores.
