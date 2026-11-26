@@ -8,7 +8,7 @@ const methods = [
   {id:'revisao',title:'Revisão espaçada',category:'Organização',time:'15 min',symbol:'↻',intro:'Distribua as revisões ao longo dos dias e ajuste os intervalos.',steps:['Separe perguntas sobre o conteúdo estudado.','Agende revisões em dias diferentes em vez de concentrar tudo na véspera.','Revise mais cedo o que esqueceu e aumente o intervalo do que já domina.']}
 ];
 
-methods.forEach(method => { method.image = 'metodos/' + method.id + '.svg'; method.imageAlt = {"pomodoro":"Cronômetro com um intervalo de 25 minutos ao lado de um caderno.","recuperacao":"Cartões de perguntas e respostas para praticar a recordação ativa.","semana":"Agenda semanal com blocos de estudo distribuídos entre os dias.","feynman":"Quadro com uma explicação visual simples e ideias conectadas.","prioridade":"Lista de tarefas com uma atividade em destaque.","revisao":"Calendário com revisões distribuídas ao longo do tempo."}[method.id]; });
+methods.forEach(method => { method.image = 'metodos/' + method.id + '-v2.jpg'; method.imageAlt = {"pomodoro":"Temporizador azul ao lado de livros e de um caderno aberto sobre uma mesa cinza.","recuperacao":"Caixa azul com cartões de estudo, um ponto de interrogação e um desenho de lâmpada.","semana":"Agenda aberta com blocos de horários em azul e uma caneta para planejar a semana.","feynman":"Quadro branco com uma lâmpada ligada a formas simples, acompanhado de caderno e livros.","prioridade":"Lista de tarefas em um bloco de papel com a primeira atividade destacada e marcada em azul.","revisao":"Calendário com três revisões marcadas em intervalos crescentes e pilhas de cartões ao lado."}[method.id]; });
 
 // Etapa 2: persistência local. Falhas de armazenamento não bloqueiam o site.
 function read(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
@@ -25,8 +25,7 @@ const cards = document.querySelector('#cards');
 function renderCards() {
   const query = normalize(document.querySelector('#busca').value.trim());
   const visible = methods.filter(m => (filter === 'Todos' || (filter === 'Salvos' ? saved.has(m.id) : m.category === filter)) && normalize(`${m.title} ${m.category} ${m.intro}`).includes(query));
-  cards.innerHTML = visible.map(m => `<article class="card"><a class="card-visual" href="${m.id}.html" aria-label="Conhecer ${m.title}"><img class="method-art" src="${m.image}" alt="${m.imageAlt}" width="640" height="400" loading="lazy"></a><div class="card-top"><span>${m.category} · ${m.time}</span></div><div class="card-body"><h3><a href="${m.id}.html">${m.title}</a></h3><p>${m.intro}</p><div class="card-actions"><a class="method-link" href="${m.id}.html" aria-label="Como usar ${m.title}">Como usar</a><button data-save="${m.id}" aria-label="Salvar ${m.title}" aria-pressed="${saved.has(m.id)}">${saved.has(m.id) ? 'Salvo' : 'Salvar'}</button></div><label class="check-label"><input type="checkbox" data-done="${m.id}" ${done.has(m.id) ? 'checked' : ''}>Já experimentei</label></div></article>`).join('');
-  applyMethodImages();
+  cards.innerHTML = visible.map(m => `<article class="card"><a class="card-visual" href="${m.id}.html" aria-label="Conhecer ${m.title}"><img class="method-art" src="${m.image}" alt="${m.imageAlt}" width="1586" height="992" loading="lazy"></a><div class="card-top"><span>${m.category} · ${m.time}</span></div><div class="card-body"><h3><a href="${m.id}.html">${m.title}</a></h3><p>${m.intro}</p><div class="card-actions"><a class="method-link" href="${m.id}.html" aria-label="Como usar ${m.title}">Como usar</a><button data-save="${m.id}" aria-label="Salvar ${m.title}" aria-pressed="${saved.has(m.id)}">${saved.has(m.id) ? 'Salvo' : 'Salvar'}</button></div><label class="check-label"><input type="checkbox" data-done="${m.id}" ${done.has(m.id) ? 'checked' : ''}>Já experimentei</label></div></article>`).join('');
   // O conteúdo interpolado acima é fixo no código; a busca nunca vira HTML.
   document.querySelector('#resultados').textContent = visible.length ? `${visible.length} método(s) encontrado(s).` : 'Nenhum método encontrado. Tente outra palavra ou categoria.';
 }
@@ -62,16 +61,9 @@ if (cards) {
 // Etapa 4: preferências, compartilhadas por todas as páginas.
 let dark = read('trilha-dark', window.matchMedia('(prefers-color-scheme: dark)').matches) === true;
 let large = read('trilha-large', false) === true;
-function applyMethodImages() {
-  document.querySelectorAll('.method-art').forEach(image => {
-    const base = image.getAttribute('src').replace('-escuro.svg', '.svg');
-    image.setAttribute('src', document.documentElement.dataset.theme === 'dark' ? base.replace('.svg', '-escuro.svg') : base);
-  });
-}
 function applyPreferences() {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   document.documentElement.classList.toggle('large', large);
-  applyMethodImages();
   const theme = document.querySelector('#theme');
   if (theme) { theme.setAttribute('aria-pressed', String(dark)); theme.textContent = dark ? 'Modo claro' : 'Modo escuro'; }
   document.querySelector('#font')?.setAttribute('aria-pressed', String(large));

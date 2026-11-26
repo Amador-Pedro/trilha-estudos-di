@@ -28,3 +28,7 @@
 
 
 
+
+/* Fotografias geradas para as metodologias, preservadas nos dois temas. */
+.method-art{object-fit:cover}
+:root[data-theme=dark] .method-art{filter:brightness(.9) saturate(.85)}

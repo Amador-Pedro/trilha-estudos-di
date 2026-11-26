@@ -79,3 +79,7 @@ O modo claro usa textos azuis e o modo escuro usa tons de cinza. Cada metodologi
 
 Consulte CHANGELOG.md para o histórico de versões e os limites da verificação desta atualização.
 
+
+## Imagens da versão 1.2.0
+
+As seis metodologias usam cenas de estudo em estilo fotográfico geradas com IA, em azul, cinza e branco. Os arquivos metodos/*-v2.jpg são compartilhados pelos cartões e páginas dos métodos. Consulte metodos/PROMPTS.md para os prompts e a origem.
