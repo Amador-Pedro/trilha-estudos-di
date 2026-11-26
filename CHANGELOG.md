@@ -1,5 +1,14 @@
 # Histórico de versões
 
+## 1.2.1 — 26/11/2026
+
+- Controles de modo escuro e ampliação de fonte movidos para o cabeçalho da página inicial, antes do conteúdo principal.
+- Cabeçalho adaptável, com quebra de linha para navegação e controles em telas menores.
+- Botão de fonte informa a ação disponível: Ampliar fonte ou Fonte padrão.
+- Barra de progresso com trilho, preenchimento e borda definidos nos dois temas, incluindo estilos para Chromium, Safari e Firefox.
+- Mantidos valor nativo e nome acessível da barra; texto alternativo acompanha o progresso atual.
+
+
 ## 1.2.0 — 26/11/2026
 
 - Substituídas as seis ilustrações dos métodos por imagens geradas em estilo fotográfico, com paleta consistente de azul, cinza e branco.

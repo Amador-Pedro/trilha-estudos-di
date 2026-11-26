@@ -29,7 +29,7 @@ function renderCards() {
   // O conteúdo interpolado acima é fixo no código; a busca nunca vira HTML.
   document.querySelector('#resultados').textContent = visible.length ? `${visible.length} método(s) encontrado(s).` : 'Nenhum método encontrado. Tente outra palavra ou categoria.';
 }
-function updateProgress() { document.querySelector('#progresso').textContent = `${done.size} de ${methods.length}`; document.querySelector('#barra').value = done.size; }
+function updateProgress() { const label = `${done.size} de ${methods.length}`; document.querySelector('#progresso').textContent = label; const bar = document.querySelector('#barra'); bar.value = done.size; bar.textContent = label; }
 if (cards) {
   renderCards(); updateProgress();
   document.querySelector('#busca').addEventListener('input', renderCards);
@@ -66,7 +66,8 @@ function applyPreferences() {
   document.documentElement.classList.toggle('large', large);
   const theme = document.querySelector('#theme');
   if (theme) { theme.setAttribute('aria-pressed', String(dark)); theme.textContent = dark ? 'Modo claro' : 'Modo escuro'; }
-  document.querySelector('#font')?.setAttribute('aria-pressed', String(large));
+  const font = document.querySelector('#font');
+  if (font) { font.setAttribute('aria-pressed', String(large)); font.textContent = large ? 'Fonte padrão' : 'Ampliar fonte'; }
 }
 applyPreferences();
 document.querySelector('#theme')?.addEventListener('click', () => { dark = !dark; write('trilha-dark', dark); applyPreferences(); });
