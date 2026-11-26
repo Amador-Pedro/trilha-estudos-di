@@ -14,11 +14,11 @@ Abra `index.html` no navegador. Não é necessário instalar pacotes. Para uma o
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `index.html` | Estrutura semântica, seções, busca, formulário, acessibilidade e diálogo |
+| `index.html` | Estrutura semântica, seções, busca, formulário e acessibilidade |
 | `login.html` | Interface de login demonstrativa, sem autenticação |
 | `style.css` | Paletas, tipografia, componentes, foco e adaptação a telas menores |
 | `app.js` | Conteúdo, busca, filtros, favoritos, progresso, carrossel e eventos |
-| `*.svg` | Três ilustrações locais criadas para este projeto |
+| `*.svg` | Ilustrações locais da página inicial |
 | `*.md` | Explicação do código, apresentação, testes e registro de IA |
 
 ## Construção passo a passo
@@ -32,7 +32,7 @@ Abra `index.html` no navegador. Não é necessário instalar pacotes. Para uma o
 7. Representar os métodos em uma lista de objetos JavaScript.
 8. Renderizar os cartões e combinar busca textual com filtros de categoria.
 9. Usar conjuntos (`Set`) para favoritos e concluídos, evitando duplicatas; salvar apenas identificadores e preferências no `localStorage`.
-10. Implementar diálogo nativo com instruções, carrossel manual e validação dos formulários.
+10. Implementar páginas individuais com instruções, carrossel manual e validação dos formulários.
 11. Conferir sintaxe, cálculos de contraste e interação no navegador; registrar as limitações em vez de declarar conformidade total.
 12. Publicar no GitHub e manter novos commits a cada mudança entendida e validada.
 
@@ -72,3 +72,10 @@ Leia `ENTENDA-O-CODIGO.md`. Antes de pedir uma alteração, explique o comportam
 - [GitHub — configuração do Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
 Pesquisa realizada em 19/11/2026. IA utilizada: assistente Codex, da OpenAI, para planejamento, geração de código, documentação e apoio à verificação. O aluno deve revisar o material e escrever pessoalmente a redação da Parte C, conforme o enunciado.
+
+## Atualização 1.1.0
+
+O modo claro usa textos azuis e o modo escuro usa tons de cinza. Cada metodologia possui uma página HTML própria e uma ilustração na pasta metodos/, com versões clara e escura. Clique na imagem, no título ou em Como usar para abrir a página do método. Favoritos, progresso, tema e tamanho da fonte continuam compartilhados pelo navegador.
+
+Consulte CHANGELOG.md para o histórico de versões e os limites da verificação desta atualização.
+

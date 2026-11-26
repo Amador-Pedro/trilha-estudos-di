@@ -8,6 +8,8 @@ const methods = [
   {id:'revisao',title:'Revisão espaçada',category:'Organização',time:'15 min',symbol:'↻',intro:'Distribua as revisões ao longo dos dias e ajuste os intervalos.',steps:['Separe perguntas sobre o conteúdo estudado.','Agende revisões em dias diferentes em vez de concentrar tudo na véspera.','Revise mais cedo o que esqueceu e aumente o intervalo do que já domina.']}
 ];
 
+methods.forEach(method => { method.image = 'metodos/' + method.id + '.svg'; method.imageAlt = {"pomodoro":"Cronômetro com um intervalo de 25 minutos ao lado de um caderno.","recuperacao":"Cartões de perguntas e respostas para praticar a recordação ativa.","semana":"Agenda semanal com blocos de estudo distribuídos entre os dias.","feynman":"Quadro com uma explicação visual simples e ideias conectadas.","prioridade":"Lista de tarefas com uma atividade em destaque.","revisao":"Calendário com revisões distribuídas ao longo do tempo."}[method.id]; });
+
 // Etapa 2: persistência local. Falhas de armazenamento não bloqueiam o site.
 function read(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
 function write(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Preferências continuam válidas nesta sessão. */ } }
@@ -23,7 +25,8 @@ const cards = document.querySelector('#cards');
 function renderCards() {
   const query = normalize(document.querySelector('#busca').value.trim());
   const visible = methods.filter(m => (filter === 'Todos' || (filter === 'Salvos' ? saved.has(m.id) : m.category === filter)) && normalize(`${m.title} ${m.category} ${m.intro}`).includes(query));
-  cards.innerHTML = visible.map(m => `<article class="card"><div class="card-top"><span class="card-symbol" aria-hidden="true">${m.symbol}</span><span>${m.category} · ${m.time}</span></div><div class="card-body"><h3>${m.title}</h3><p>${m.intro}</p><div class="card-actions"><button data-details="${m.id}" aria-label="Como usar ${m.title}">Como usar</button><button data-save="${m.id}" aria-label="Salvar ${m.title}" aria-pressed="${saved.has(m.id)}">${saved.has(m.id) ? 'Salvo' : 'Salvar'}</button></div><label class="check-label"><input type="checkbox" data-done="${m.id}" ${done.has(m.id) ? 'checked' : ''}>Já experimentei</label></div></article>`).join('');
+  cards.innerHTML = visible.map(m => `<article class="card"><a class="card-visual" href="${m.id}.html" aria-label="Conhecer ${m.title}"><img class="method-art" src="${m.image}" alt="${m.imageAlt}" width="640" height="400" loading="lazy"></a><div class="card-top"><span>${m.category} · ${m.time}</span></div><div class="card-body"><h3><a href="${m.id}.html">${m.title}</a></h3><p>${m.intro}</p><div class="card-actions"><a class="method-link" href="${m.id}.html" aria-label="Como usar ${m.title}">Como usar</a><button data-save="${m.id}" aria-label="Salvar ${m.title}" aria-pressed="${saved.has(m.id)}">${saved.has(m.id) ? 'Salvo' : 'Salvar'}</button></div><label class="check-label"><input type="checkbox" data-done="${m.id}" ${done.has(m.id) ? 'checked' : ''}>Já experimentei</label></div></article>`).join('');
+  applyMethodImages();
   // O conteúdo interpolado acima é fixo no código; a busca nunca vira HTML.
   document.querySelector('#resultados').textContent = visible.length ? `${visible.length} método(s) encontrado(s).` : 'Nenhum método encontrado. Tente outra palavra ou categoria.';
 }
@@ -46,15 +49,7 @@ if (cards) {
       if (filter === 'Salvos') { renderCards(); document.querySelector('[data-filter="Salvos"]').focus(); }
       else { saveButton.setAttribute('aria-pressed', String(saved.has(id))); saveButton.textContent = saved.has(id) ? 'Salvo' : 'Salvar'; }
     }
-    const detailsButton = event.target.closest('[data-details]');
-    if (detailsButton) {
-      const m = methods.find(item => item.id === detailsButton.dataset.details);
-      document.querySelector('#detail-title').textContent = m.title;
-      document.querySelector('#detail-category').textContent = m.category;
-      document.querySelector('#detail-intro').textContent = m.intro;
-      document.querySelector('#detail-steps').replaceChildren(...m.steps.map(step => { const li = document.createElement('li'); li.textContent = step; return li; }));
-      document.querySelector('#details').showModal();
-    }
+
   });
   cards.addEventListener('change', event => {
     const checkbox = event.target.closest('[data-done]');
@@ -62,16 +57,21 @@ if (cards) {
     checkbox.checked ? done.add(checkbox.dataset.done) : done.delete(checkbox.dataset.done);
     write('trilha-done', [...done]); updateProgress();
   });
-  document.querySelector('#details').setAttribute('aria-labelledby','detail-title');
-  document.querySelector('#close-dialog').addEventListener('click', () => document.querySelector('#details').close());
 }
 
-// Etapa 4: preferências, compartilhadas pelas duas páginas.
+// Etapa 4: preferências, compartilhadas por todas as páginas.
 let dark = read('trilha-dark', window.matchMedia('(prefers-color-scheme: dark)').matches) === true;
 let large = read('trilha-large', false) === true;
+function applyMethodImages() {
+  document.querySelectorAll('.method-art').forEach(image => {
+    const base = image.getAttribute('src').replace('-escuro.svg', '.svg');
+    image.setAttribute('src', document.documentElement.dataset.theme === 'dark' ? base.replace('.svg', '-escuro.svg') : base);
+  });
+}
 function applyPreferences() {
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   document.documentElement.classList.toggle('large', large);
+  applyMethodImages();
   const theme = document.querySelector('#theme');
   if (theme) { theme.setAttribute('aria-pressed', String(dark)); theme.textContent = dark ? 'Modo claro' : 'Modo escuro'; }
   document.querySelector('#font')?.setAttribute('aria-pressed', String(large));
@@ -93,3 +93,16 @@ if (document.querySelector('#proximo')) { showSlide(); document.querySelector('#
 // Etapa 6: formulários demonstrativos. Não há rede nem armazenamento dos campos.
 document.querySelector('#contact-form')?.addEventListener('submit', event => { event.preventDefault(); const form = event.currentTarget; if (!form.nome.value.trim() || !form.mensagem.value.trim()) { document.querySelector('#contact-status').textContent = 'Preencha nome e mensagem com texto, não apenas espaços.'; return; } document.querySelector('#contact-status').textContent = 'Campos validados. Esta demonstração não envia mensagens.'; });
 document.querySelector('#login-form')?.addEventListener('submit', event => { event.preventDefault(); document.querySelector('#login-status').textContent = 'Validação concluída. Esta versão não autentica usuários. Volte para explorar os métodos.'; event.currentTarget.reset(); });
+
+// Controles das páginas individuais, com a mesma persistência da página inicial.
+const methodPage = document.querySelector('[data-method-page]');
+if (methodPage) {
+  const id = methodPage.dataset.methodPage;
+  const saveButton = document.querySelector('[data-method-save]');
+  const checkbox = document.querySelector('[data-method-done]');
+  const status = document.querySelector('#method-status');
+  const updateMethod = () => { saveButton.setAttribute('aria-pressed', String(saved.has(id))); saveButton.textContent = saved.has(id) ? 'Salvo' : 'Salvar método'; checkbox.checked = done.has(id); };
+  updateMethod();
+  saveButton.addEventListener('click', () => { saved.has(id) ? saved.delete(id) : saved.add(id); write('trilha-saved', [...saved]); updateMethod(); status.textContent = saved.has(id) ? 'Método adicionado aos seus salvos.' : 'Método removido dos seus salvos.'; });
+  checkbox.addEventListener('change', () => { checkbox.checked ? done.add(id) : done.delete(id); write('trilha-done', [...done]); status.textContent = checkbox.checked ? 'Progresso atualizado: método experimentado.' : 'Progresso atualizado.'; });
+}
