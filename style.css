@@ -26,4 +26,5 @@
 .method-tools .check-label{margin:0}.method-next{margin-top:3rem;padding:1.5rem;background:var(--surface);border-radius:12px}
 @media(max-width:800px){.method-hero{grid-template-columns:1fr;gap:1.5rem}.method-hero figure{max-width:600px;width:100%;margin-inline:auto}}
 
-:root[data-theme=dark] .method-art{filter:grayscale(1) brightness(.8)}
+
+
